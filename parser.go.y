@@ -13,7 +13,8 @@ package main
 %token<token> NUMBER
 %token<token> '(' ')'
 
-%left '+'
+%left '+' '-'
+%left '*' '/'
 
 %%
 
@@ -26,6 +27,9 @@ program
 
 expr
     : expr '+' expr { $$ = ExprBinary{lhs: $1, op: "+", rhs: $3} }
+    | expr '-' expr { $$ = ExprBinary{lhs: $1, op: "-", rhs: $3} }
+    | expr '*' expr { $$ = ExprBinary{lhs: $1, op: "*", rhs: $3} }
+    | expr '/' expr { $$ = ExprBinary{lhs: $1, op: "/", rhs: $3} }
     | primary { $$ = $1 }
 
 primary

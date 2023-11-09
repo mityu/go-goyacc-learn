@@ -38,7 +38,7 @@ func (e ExprBinary) Eval() (Expr, error) {
 	}
 
 	switch e.op {
-	case "+":
+	case "+", "-", "*", "/":
 		lhsv, err := lhs.(ExprNum).Value()
 		if err != nil {
 			return nil, err
@@ -47,7 +47,19 @@ func (e ExprBinary) Eval() (Expr, error) {
 		if err != nil {
 			return nil, err
 		}
-		v := lhsv + rhsv
+		var v int
+		switch e.op {
+		case "+":
+			v = lhsv + rhsv
+		case "-":
+			v = lhsv - rhsv
+		case "*":
+			v = lhsv * rhsv
+		case "/":
+			v = lhsv / rhsv
+		default:
+			panic("unreachable")
+		}
 		return ExprNum{literal: fmt.Sprintf("%d", v)}, nil
 	}
 	panic("unreachable")

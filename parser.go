@@ -24,6 +24,9 @@ var yyToknames = [...]string{
 	"'('",
 	"')'",
 	"'+'",
+	"'-'",
+	"'*'",
+	"'/'",
 }
 
 var yyStatenames = [...]string{}
@@ -32,7 +35,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser.go.y:35
+//line parser.go.y:39
 
 //line yacctab:1
 var yyExca = [...]int8{
@@ -43,34 +46,39 @@ var yyExca = [...]int8{
 
 const yyPrivate = 57344
 
-const yyLast = 10
+const yyLast = 21
 
 var yyAct = [...]int8{
-	9, 6, 2, 6, 4, 5, 3, 1, 7, 8,
+	15, 6, 7, 8, 9, 2, 6, 7, 8, 9,
+	3, 10, 11, 12, 13, 14, 8, 9, 4, 5,
+	1,
 }
 
 var yyPact = [...]int16{
-	0, -1000, -4, -1000, -1000, 0, 0, -6, -1000, -1000,
+	14, -1000, -1, -1000, -1000, 14, 14, 14, 14, 14,
+	-6, 7, 7, -1000, -1000, -1000,
 }
 
 var yyPgo = [...]int8{
-	0, 7, 2, 6,
+	0, 20, 5, 10,
 }
 
 var yyR1 = [...]int8{
-	0, 1, 2, 2, 3, 3,
+	0, 1, 2, 2, 2, 2, 2, 3, 3,
 }
 
 var yyR2 = [...]int8{
-	0, 1, 3, 1, 1, 3,
+	0, 1, 3, 3, 3, 3, 1, 1, 3,
 }
 
 var yyChk = [...]int16{
-	-1000, -1, -2, -3, 4, 5, 7, -2, -2, 6,
+	-1000, -1, -2, -3, 4, 5, 7, 8, 9, 10,
+	-2, -2, -2, -2, -2, 6,
 }
 
 var yyDef = [...]int8{
-	0, -2, 1, 3, 4, 0, 0, 0, 2, 5,
+	0, -2, 1, 6, 7, 0, 0, 0, 0, 0,
+	0, 2, 3, 4, 5, 8,
 }
 
 var yyTok1 = [...]int8{
@@ -78,7 +86,7 @@ var yyTok1 = [...]int8{
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	5, 6, 3, 7,
+	5, 6, 9, 7, 3, 8, 3, 10,
 }
 
 var yyTok2 = [...]int8{
@@ -428,32 +436,50 @@ yydefault:
 
 	case 1:
 		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.go.y:22
+//line parser.go.y:23
 		{
 			yyVAL.expr = yyDollar[1].expr
 			yylex.(*Lexer).result = yyVAL.expr
 		}
 	case 2:
 		yyDollar = yyS[yypt-3 : yypt+1]
-//line parser.go.y:28
+//line parser.go.y:29
 		{
 			yyVAL.expr = ExprBinary{lhs: yyDollar[1].expr, op: "+", rhs: yyDollar[3].expr}
 		}
 	case 3:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.go.y:29
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.go.y:30
 		{
-			yyVAL.expr = yyDollar[1].expr
+			yyVAL.expr = ExprBinary{lhs: yyDollar[1].expr, op: "-", rhs: yyDollar[3].expr}
 		}
 	case 4:
-		yyDollar = yyS[yypt-1 : yypt+1]
-//line parser.go.y:32
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.go.y:31
 		{
-			yyVAL.expr = ExprNum{literal: yyDollar[1].token.literal}
+			yyVAL.expr = ExprBinary{lhs: yyDollar[1].expr, op: "*", rhs: yyDollar[3].expr}
 		}
 	case 5:
 		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.go.y:32
+		{
+			yyVAL.expr = ExprBinary{lhs: yyDollar[1].expr, op: "/", rhs: yyDollar[3].expr}
+		}
+	case 6:
+		yyDollar = yyS[yypt-1 : yypt+1]
 //line parser.go.y:33
+		{
+			yyVAL.expr = yyDollar[1].expr
+		}
+	case 7:
+		yyDollar = yyS[yypt-1 : yypt+1]
+//line parser.go.y:36
+		{
+			yyVAL.expr = ExprNum{literal: yyDollar[1].token.literal}
+		}
+	case 8:
+		yyDollar = yyS[yypt-3 : yypt+1]
+//line parser.go.y:37
 		{
 			yyVAL.expr = yyDollar[2].expr
 		}
